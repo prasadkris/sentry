@@ -11,7 +11,7 @@ import useCrumbHandlers from 'sentry/utils/replays/hooks/useCrumbHandlers';
 import type {BreadcrumbFrame, ConsoleFrame} from 'sentry/utils/replays/types';
 import MessageFormatter from 'sentry/views/replays/detail/console/messageFormatter';
 import TimestampButton from 'sentry/views/replays/detail/timestampButton';
-import {OnDimensionChange} from 'sentry/views/replays/detail/useVirtualizedInspector';
+import {OnDimensionChange} from 'sentry/views/replays/detail/useVirtualListDimentionChange';
 
 type Props = {
   currentHoverTime: number | undefined;
