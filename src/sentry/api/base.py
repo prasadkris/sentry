@@ -29,7 +29,7 @@ from sentry.utils import json
 from sentry.utils.audit import create_audit_entry
 from sentry.utils.cursors import Cursor
 from sentry.utils.dates import to_datetime
-from sentry.utils.http import is_valid_origin, origin_from_request
+from sentry.utils.http import is_valid_origin, origin_from_request, is_using_customer_domain, absolute_uri
 from sentry.utils.sdk import capture_exception
 
 from .authentication import ApiKeyAuthentication, TokenAuthentication
@@ -166,7 +166,13 @@ class Endpoint(APIView):
             mutable_query_dict.pop("cursor")
             querystring = mutable_query_dict.urlencode()
 
-        base_url = request.build_absolute_uri(urlquote(request.path))
+        url_prefix = (
+            generate_organization_url(request.subdomain)
+            if is_using_customer_domain(request)
+            else None
+        )
+
+        base_url = absolute_uri(urlquote(request.path), url_prefix=url_prefix)
 
         if querystring is not None:
             base_url = f"{base_url}?{querystring}"
